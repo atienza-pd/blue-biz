@@ -3,7 +3,6 @@ import PaperView from '@/components/PaperView.vue'
 import { usePurchaseOrderStore } from './purchase-order.store'
 import { useUpperCase } from '@/pipes/uppercase.pipe'
 import { useRouter } from 'vue-router'
-import { onUnmounted } from 'vue'
 
 const purchaseOrderStore = usePurchaseOrderStore()
 const toUpperCase = useUpperCase()

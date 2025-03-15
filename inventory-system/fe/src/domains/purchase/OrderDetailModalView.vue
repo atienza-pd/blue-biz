@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import InputAutoComplete from '@/components/InputAutoComplete.vue'
 import { useProductsStore } from '@/stores/products'
-import { computed, onBeforeMount, onUnmounted, ref, watch } from 'vue'
-import { useOrderItemStore as usePurchaseOrderItemsStore } from './order-items.store'
+import { computed } from 'vue'
 
 const props = defineProps<{
   modelValue: { id: string; productId: string; quantity: number }
