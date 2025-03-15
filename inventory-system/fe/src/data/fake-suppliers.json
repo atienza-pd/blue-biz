@@ -1,0 +1,42 @@
+[
+  {
+    "id": "sup-001",
+    "name": "TechCore Solutions",
+    "description": "Leading supplier of computer hardware and peripherals",
+    "contactPerson": "John Anderson",
+    "email": "john.anderson@techcore.com",
+    "phone": "555-0123"
+  },
+  {
+    "id": "sup-002",
+    "name": "Office Plus Supply",
+    "description": "Office furniture and supplies distributor",
+    "contactPerson": "Sarah Mitchell",
+    "email": "s.mitchell@officeplus.com",
+    "phone": "555-0234"
+  },
+  {
+    "id": "sup-003",
+    "name": "Global Electronics Inc",
+    "description": "Electronic components and accessories supplier",
+    "contactPerson": "Michael Chen",
+    "email": "m.chen@globalelec.com",
+    "phone": "555-0345"
+  },
+  {
+    "id": "sup-004",
+    "name": "PrintWorks Co",
+    "description": "Printing materials and equipment supplier",
+    "contactPerson": "Emma Watson",
+    "email": "emma.w@printworks.com",
+    "phone": "555-0456"
+  },
+  {
+    "id": "sup-005",
+    "name": "Smart Storage Solutions",
+    "description": "Storage and organization products supplier",
+    "contactPerson": "David Brown",
+    "email": "d.brown@smartstorage.com",
+    "phone": "555-0567"
+  }
+]
