@@ -1,7 +1,7 @@
 import { fetchProducts } from '@/domains/catalogs/products/fetch-products'
 import type { Product } from '@/domains/catalogs/products/product'
 import { defineStore } from 'pinia'
-import { onMounted, readonly, ref, type Ref } from 'vue'
+import { onMounted, readonly, ref } from 'vue'
 
 export const useProductsStore = defineStore('products', () => {
   const products = ref([] as Product[])

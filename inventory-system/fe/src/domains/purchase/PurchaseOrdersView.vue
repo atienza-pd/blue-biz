@@ -9,7 +9,7 @@ const toUpperCase = useUpperCase()
 const router = useRouter()
 
 const addPurchaseOrder = () => {
-  router.push({ name: 'purchase-order-detail', params: { id: 'new' } })
+  router.push({ name: 'order-detail', params: { id: 'new' } })
 }
 
 const editProduct = (id: string) => {

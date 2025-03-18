@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { useEventBus } from '@/eventBus'
 
 const catalogRoutes = [
   {
@@ -34,16 +35,21 @@ const catalogRoutes = [
   },
 ]
 
-const purchaseOrderRoutes = [
+const orderRoutes = [
   {
-    path: '/purchase-orders',
-    name: 'purchase-orders',
+    path: '/orders',
+    name: 'orders',
     component: () => import('../domains/purchase/PurchaseOrdersView.vue'),
   },
   {
-    path: '/purchase-orders/:id',
-    name: 'purchase-order-detail',
+    path: '/orders/:id',
+    name: 'order-detail',
     component: () => import('../domains/purchase/PurchaseOrderDetailView.vue'),
+  },
+  {
+    path: '/orders/:orderId/items/:id',
+    name: 'item-detail',
+    component: () => import('../domains/purchase/PurchaseOrderItemDetail.vue'),
   },
 ]
 
@@ -56,7 +62,7 @@ const router = createRouter({
       component: HomeView,
     },
     ...catalogRoutes,
-    ...purchaseOrderRoutes,
+    ...orderRoutes,
     {
       path: '/about',
       name: 'about',
@@ -79,6 +85,22 @@ const router = createRouter({
       component: () => import('../views/NotFoundView.vue'),
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const { emit } = useEventBus();
+  if (to.name === 'item-detail') {
+    const orderId = to.params.orderId
+    if (!orderId || orderId === 'new' || orderId === 'null') {
+      emit('alert', {
+        type: 'error',
+        message: 'Order ID is required',
+      })
+      next({ name: 'not-found' })
+      return
+    }
+  }
+  next()
 })
 
 export default router

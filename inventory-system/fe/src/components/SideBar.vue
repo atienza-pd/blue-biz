@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, useRoute } from 'vue-router'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { IconHome, IconProduct, IconContact, IconAbout } from './icons'
 import SideBarItem from './SideBarItem.vue'
 
@@ -40,15 +39,15 @@ function toggleSidebar() {
         </template>
       </SideBarItem>
       <SideBarItem
-        to="/purchase-orders"
-        title="Purchase Orders"
-        :isActive="$route.path.includes('/purchase-orders')"
+        to="/orders"
+        title="Orders"
+        :isActive="$route.path.includes('/orders')"
       >
         <template #icon>
           <IconProduct />
         </template>
       </SideBarItem>
-      <SideBarItem to="/sales" title="Sales" :isActive="$route.path.includes('/order')">
+      <SideBarItem to="/sales" title="Sales" :isActive="$route.path.includes('/sales')">
         <template #icon>
           <IconProduct />
         </template>

@@ -1,6 +1,16 @@
 <template>
   <nav class="bg-white p-4 flex justify-between items-center shadow-md">
-    <div class="text-black text-lg">Inventory System</div>
+    <div class="text-black text-lg flex items-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 mr-2 text-blue-600"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM6 6h2v2H6V6zm0 4h8v2H6v-2zm0 4h8v2H6v-2zm10 0h2v2h-2v-2zm0-4h2v2h-2v-2zm0-4h2v2h-2V6z"/>
+      </svg>
+      Blue Biz Inventory System
+    </div>
     <div class="relative" ref="dropdownRef">
       <svg
         @click="toggleDropdown"

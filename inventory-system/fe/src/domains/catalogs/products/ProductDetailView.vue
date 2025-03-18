@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import PaperView from '@/components/PaperView.vue'
 import { useProductsStore } from '@/stores/products'
+import { useProductFormValidation } from '@/composables/useProductFormValidation'
 import {
   computed,
   reactive,
   ref,
-  type Reactive,
-  type Ref,
-  onMounted,
-  watch,
   watchEffect,
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -17,11 +14,6 @@ import type { Product } from './product'
 const productStore = useProductsStore()
 const route = useRoute()
 const router = useRouter()
-const errors = ref({
-  name: '',
-  price: '',
-  quantity: '',
-})
 
 const id = route.params.id as string
 
@@ -31,37 +23,15 @@ const product = computed(() => {
     : productStore.selectProduct(id)
 })
 
+const { errors, validateField, validateForm, isFormValid } = useProductFormValidation(product)
+
 const title = id === 'new' ? 'Add new' : `Edit `
 
 const originalProduct = ref({ ...product.value })
 
-const isFormValid = computed(() => {
-  return product.value?.name && product.value?.unitPrice && product.value?.quantity
-})
-
 const isFormDirty = computed(() => {
   return JSON.stringify(product.value) !== JSON.stringify(originalProduct.value)
 })
-
-const validateForm = () => {
-  errors.value.name = product.value?.name ? '' : 'Product Name is required'
-  errors.value.price = product.value?.unitPrice ? '' : 'Product Price is required'
-  errors.value.quantity = product.value?.quantity ? '' : 'Product Quantity is required'
-}
-
-const validateField = (field: keyof typeof errors.value) => {
-  switch (field) {
-    case 'name':
-      errors.value.name = product.value?.name ? '' : 'Product Name is required'
-      break
-    case 'price':
-      errors.value.price = product.value?.unitPrice ? '' : 'Product Price is required'
-      break
-    case 'quantity':
-      errors.value.quantity = product.value?.quantity ? '' : 'Product Quantity is required'
-      break
-  }
-}
 
 watchEffect(() => validateField('name'))
 watchEffect(() => validateField('price'))
@@ -69,7 +39,7 @@ watchEffect(() => validateField('quantity'))
 
 const submit = () => {
   validateForm()
-  if (!isFormValid.value) return
+  if (!isFormValid()) return
 
   if (product.value?.id) {
     productStore.editProduct(product.value as Product)

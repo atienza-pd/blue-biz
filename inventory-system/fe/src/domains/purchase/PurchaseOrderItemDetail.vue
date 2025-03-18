@@ -1,22 +1,13 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import InputAutoComplete from '@/components/InputAutoComplete.vue';
+import PaperView from '@/components/PaperView.vue';
 import { useProductsStore } from '@/stores/products';
-import { computed } from 'vue';
-
-const props = defineProps<{
-  modelValue: { id: string; productId: string; quantity: number }
-}>()
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: { id: string; productId: string; quantity: number }): void
-}>()
-
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
+const product = ref({ id: '', productId: '', quantity: 0 })
+const id = route.params.id as string
 const productsStore = useProductsStore()
-const product = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-})
-
 const products = computed(() =>
   productsStore.products.map((product) => ({
     id: product.id ?? '',
@@ -24,6 +15,7 @@ const products = computed(() =>
     unitPrice: product.unitPrice,
   })),
 )
+
 
 const selectedProduct = computed(() => {
   const selectedProduct = productsStore.selectProduct(product.value.productId)
@@ -41,7 +33,8 @@ const totalPrice = computed(() => product.value.quantity * selectedProduct.value
 </script>
 
 <template>
-  <form class="space-y-6">
+  <PaperView title="Order Item Detail">
+    <form class="space-y-6">
     <div>
       <label for="supplier" class="block text-sm font-medium text-gray-700">Product</label>
       <div class="relative mt-1">
@@ -81,4 +74,5 @@ const totalPrice = computed(() => product.value.quantity * selectedProduct.value
       />
     </div>
   </form>
+  </PaperView>
 </template>

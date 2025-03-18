@@ -1,33 +1,40 @@
 <script setup lang="ts">
-import ExampleView from '@/components/ExampleView.vue'
-import ExampleView2 from '@/components/ExampleView2.vue'
-import IconAbout from '@/components/icons/IconAbout.vue'
-import IconInformation from '@/components/icons/IconInformation.vue'
-import IconProduct from '@/components/icons/IconProduct.vue'
-import PaperView from '@/components/PaperView.vue'
-import PopupModal from '@/components/PopupModal.vue'
-import { useModal } from '@/composables/useModal'
-import { useUpperCase } from '@/pipes/uppercase.pipe'
-import { ref, watch } from 'vue'
-import OrderDetailModalView from './OrderDetailModalView.vue'
+import PaperView from '@/components/PaperView.vue';
+import Alert from '@/components/Alert/TheAlert.vue';
+import { useUpperCase } from '@/pipes/uppercase.pipe';
+import { useRoute, useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { useEventBus } from '@/eventBus';
 
-const toUpperCase = useUpperCase()
-const { isOpen, open, close } = useModal()
-const product = ref({ id: '', productId: '', quantity: 0 })
+const showAlert = ref(false);
+const toUpperCase = useUpperCase();
+const router = useRouter();
+const route = useRoute();
+const id = route.params.id;
+
+const { emit } = useEventBus();
 
 const addNewItemOrder = () => {
-  product.value = { id: '', productId: '', quantity: 0 }
-  open()
-}
-const editItemOrder = (id: string) => {}
+  if (!id || id === 'new') {
+    emit('alert', { type: 'error', message: 'Please save the purchase order first before adding items' });
+    return;
+  }
 
-const onConfirm = () => {
-  console.log(product.value)
-  close()
-}
+  router.push({ name: 'item-detail', params: { orderId: id, id: 'new' } });
+};
+
+const editItemOrder = (id: string) => {};
+
+const onConfirm = () => {};
 </script>
 
 <template>
+  <Alert
+      type="success"
+      message="Please save the purchase order first before adding items"
+      :show="showAlert"
+      @close="showAlert = false"
+    />
   <div class="space-y-1">
     <PaperView title="Purchase Order Detail" :collapsed="true" collapsed-state="collapsed">
       <form class="space-y-6">
@@ -166,22 +173,5 @@ const onConfirm = () => {
         </table>
       </div>
     </PaperView>
-    <PopupModal v-model="isOpen">
-      <template #headerIcon>
-        <IconInformation />
-      </template>
-      <OrderDetailModalView v-model="product" />
-      <template #footer>
-        <div class="flex justify-end space-x-3">
-          <button @click="close" class="rounded-md px-4 py-2 hover:bg-gray-100">Close</button>
-          <button
-            @click="onConfirm"
-            class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-          >
-            Confirm
-          </button>
-        </div>
-      </template>
-    </PopupModal>
   </div>
 </template>
