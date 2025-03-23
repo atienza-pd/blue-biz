@@ -1,7 +1,13 @@
-import { ref, type Ref } from 'vue'
 import type { Product } from '@/domains/catalogs/products/product'
+import { computed, ref, watchEffect, type Ref } from 'vue'
 
 export function useProductFormValidation(product: Ref<Partial<Product | null>>) {
+  const originalProduct = ref({ ...product.value })
+
+  const isFormDirty = computed(() => {
+    return JSON.stringify(product.value) !== JSON.stringify(originalProduct.value)
+  })
+
   const errors = ref({
     name: '',
     price: '',
@@ -28,14 +34,17 @@ export function useProductFormValidation(product: Ref<Partial<Product | null>>) 
     errors.value.quantity = product.value?.quantity ? '' : 'Product Quantity is required'
   }
 
-  const isFormValid = () => {
+  const isFormValid = computed(() => {
     return product.value?.name && product.value?.unitPrice && product.value?.quantity
-  }
+  })
+
+  watchEffect(() => validateField('name'))
+  watchEffect(() => validateField('price'))
+  watchEffect(() => validateField('quantity'))
 
   return {
     errors,
-    validateField,
-    validateForm,
-    isFormValid
+    isFormValid,
+    isFormDirty,
   }
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useModal } from '@/composables/useModal'
-import ModalView from './PopupModal.vue'
+import { useModal } from '@/composables/useModal';
+import ModalView from '../PopupModal.vue';
 
 const { isOpen, open, close } = useModal()
 </script>

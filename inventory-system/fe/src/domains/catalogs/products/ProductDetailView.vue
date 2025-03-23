@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import PaperView from '@/components/PaperView.vue'
+import { useProductFormValidation } from '@/domains/catalogs/products/useProductFormValidation'
 import { useProductsStore } from '@/stores/products'
-import { useProductFormValidation } from '@/composables/useProductFormValidation'
-import {
-  computed,
-  reactive,
-  ref,
-  watchEffect,
-} from 'vue'
+import { computed, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { Product } from './product'
 
@@ -17,29 +12,20 @@ const router = useRouter()
 
 const id = route.params.id as string
 
+const title = id === 'new' ? 'Add new' : `Edit `
+
 const product = computed(() => {
   return id === 'new'
     ? reactive({ id: null, name: '', description: '', unitPrice: 0, quantity: 0 })
     : productStore.selectProduct(id)
 })
 
-const { errors, validateField, validateForm, isFormValid } = useProductFormValidation(product)
-
-const title = id === 'new' ? 'Add new' : `Edit `
-
-const originalProduct = ref({ ...product.value })
-
-const isFormDirty = computed(() => {
-  return JSON.stringify(product.value) !== JSON.stringify(originalProduct.value)
-})
-
-watchEffect(() => validateField('name'))
-watchEffect(() => validateField('price'))
-watchEffect(() => validateField('quantity'))
+const { errors, isFormValid, isFormDirty } = useProductFormValidation(product)
 
 const submit = () => {
-  validateForm()
-  if (!isFormValid()) return
+  if (!isFormValid) {
+    return
+  }
 
   if (product.value?.id) {
     productStore.editProduct(product.value as Product)

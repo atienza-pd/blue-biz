@@ -1,6 +1,6 @@
 [
   {
-    "id": "sup-001",
+    "id": "1",
     "name": "TechCore Solutions",
     "description": "Leading supplier of computer hardware and peripherals",
     "contactPerson": "John Anderson",
@@ -8,7 +8,7 @@
     "phone": "555-0123"
   },
   {
-    "id": "sup-002",
+    "id": "2",
     "name": "Office Plus Supply",
     "description": "Office furniture and supplies distributor",
     "contactPerson": "Sarah Mitchell",
@@ -16,7 +16,7 @@
     "phone": "555-0234"
   },
   {
-    "id": "sup-003",
+    "id": "3",
     "name": "Global Electronics Inc",
     "description": "Electronic components and accessories supplier",
     "contactPerson": "Michael Chen",
@@ -24,7 +24,7 @@
     "phone": "555-0345"
   },
   {
-    "id": "sup-004",
+    "id": "4",
     "name": "PrintWorks Co",
     "description": "Printing materials and equipment supplier",
     "contactPerson": "Emma Watson",
@@ -32,7 +32,7 @@
     "phone": "555-0456"
   },
   {
-    "id": "sup-005",
+    "id": "5",
     "name": "Smart Storage Solutions",
     "description": "Storage and organization products supplier",
     "contactPerson": "David Brown",

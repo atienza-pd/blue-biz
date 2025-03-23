@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IconHome, IconProduct, IconContact, IconAbout } from './icons'
+import IconExample from './icons/IconExample.vue'
 import SideBarItem from './SideBarItem.vue'
 
 const isSidebarVisible = ref(true)
@@ -60,6 +61,11 @@ function toggleSidebar() {
       <SideBarItem to="/about" title="About" :isActive="$route.path === '/about'">
         <template #icon>
           <IconAbout />
+        </template>
+      </SideBarItem>
+      <SideBarItem to="/examples" title="Examples" :isActive="$route.path === '/examples'">
+        <template #icon>
+          <IconExample />
         </template>
       </SideBarItem>
     </ul>

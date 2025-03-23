@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { useEventBus } from '@/eventBus'
+import ExampleView from '@/components/examples/ExampleView.vue'
 
 const catalogRoutes = [
   {
@@ -39,17 +40,25 @@ const orderRoutes = [
   {
     path: '/orders',
     name: 'orders',
-    component: () => import('../domains/purchase/PurchaseOrdersView.vue'),
+    component: () => import('../domains/purchases/orders/OrdersView.vue'),
   },
   {
     path: '/orders/:id',
     name: 'order-detail',
-    component: () => import('../domains/purchase/PurchaseOrderDetailView.vue'),
+    component: () => import('../domains/purchases/orders/OrderDetailView.vue'),
   },
   {
     path: '/orders/:orderId/items/:id',
     name: 'item-detail',
-    component: () => import('../domains/purchase/PurchaseOrderItemDetail.vue'),
+    component: () => import('../domains/purchases/order-items/OrderItemDetail.vue'),
+  },
+]
+
+const examplesRoutes: RouteRecordRaw[] =[
+  {
+    path: '/examples',
+    name: 'examples',
+    component: ExampleView
   },
 ]
 
@@ -63,6 +72,7 @@ const router = createRouter({
     },
     ...catalogRoutes,
     ...orderRoutes,
+    ...examplesRoutes,
     {
       path: '/about',
       name: 'about',
@@ -94,9 +104,9 @@ router.beforeEach((to, from, next) => {
     if (!orderId || orderId === 'new' || orderId === 'null') {
       emit('alert', {
         type: 'error',
-        message: 'Order ID is required',
+        message: 'Please save the purchase order first before adding items',
       })
-      next({ name: 'not-found' })
+      next({ name: 'orders' })
       return
     }
   }
