@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PaperView from '@/components/PaperView.vue'
+import { useEventBus } from '@/eventBus'
 import { useSuppliersStore } from '@/stores/suppliers'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -12,7 +13,8 @@ const ordersStore = useOrdersStore()
 const suppliersStore = useSuppliersStore()
 const router = useRouter()
 const route = useRoute()
-const id = route.params.id as string
+const { emit } = useEventBus()
+let id = route.params.id as string
 const orderDetail = ref({} as OrderModel)
 const { errors, isFormValid, isFormDirty } = useOrderFormValidation(orderDetail)
 
@@ -24,13 +26,32 @@ watch(selectOrderDetail, (value) => {
   orderDetail.value = { ...value }
 }, { immediate: true })
 
-const onSubmit = () => { }
+watch(() => route.params.id, (newId) => {
+  id = newId as string
+  if (newId === 'new') {
+    orderDetail.value = {} as OrderModel
+  } else {
+    orderDetail.value = { ...ordersStore.selectPurchaseOrder(id) ?? {} as OrderModel }
+  }
+})
+
+const onSubmit = async () => {
+  if (id === 'new') {
+    ordersStore.addPurchaseOrder(orderDetail.value)
+    const newId = ordersStore.orderlist[ordersStore.orderlist.length - 1].id
+    router.replace({ params: { id: newId } })
+    emit('alert', { type: 'success', message: 'Purchase order has been saved!' })
+  } else {
+    ordersStore.editPurchaseOrder(orderDetail.value)
+    emit<{ type: string, message: string }>('alert', { type: 'success', message: 'Purchase order has been updated!' })
+  }
+}
 
 const reset = () => {
   if (id === 'new') {
     orderDetail.value = {} as OrderModel
   } else {
-    orderDetail.value = { ...selectOrderDetail.value }
+    orderDetail.value = { ...ordersStore.selectPurchaseOrder(id) ?? {} as OrderModel }
   }
 }
 

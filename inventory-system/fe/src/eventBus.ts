@@ -12,7 +12,7 @@ export function useEventBus() {
       }
       eventBus.value.get(event)!.push(callback);
     },
-    emit(event: EventBusType, payload: unknown) {
+    emit<T>(event: EventBusType, payload: T) {
       if (eventBus.value.has(event)) {
         eventBus.value.get(event)!.forEach((callback: EventCallback) => callback(payload));
       }
@@ -20,4 +20,4 @@ export function useEventBus() {
   };
 }
 
-export type EventBusType = 'alert'
+export type EventBusType = 'alert';

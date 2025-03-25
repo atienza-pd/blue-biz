@@ -21,7 +21,7 @@ export const useOrdersStore = defineStore('orders', () => {
     ];
   };
 
-  const editPurchaseOrder = (po: OrdersModel) => {
+  const editPurchaseOrder = (po: OrderModel) => {
     const index = ordersData.value.findIndex((p) => p.id === po.id);
     if (index !== -1) {
       ordersData.value.splice(index, 1, po);
