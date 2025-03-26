@@ -1,17 +1,11 @@
 <template>
-  <Alert
-    v-if="show"
-    :show="show"
-    :type="type"
-    :message="message"
-    @close="show = false"
-  />
+  <Alert v-if="show" :show="show" :type="type" :message="message" @close="show = false" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import Alert from '@/components/Alert/TheAlert.vue';
-import { useEventBus } from '@/eventBus';
+import { useEventBus } from '@/shared/event-bus/event-bus';
+import { ref } from 'vue';
 
 const show = ref(false);
 const type = ref<'success' | 'error' | 'warning' | 'info'>('success');

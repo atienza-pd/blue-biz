@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import type { EventBusType } from './event-bus-type';
 
 type EventCallback = (payload: unknown) => void;
 
@@ -19,5 +20,3 @@ export function useEventBus() {
     },
   };
 }
-
-export type EventBusType = 'alert';

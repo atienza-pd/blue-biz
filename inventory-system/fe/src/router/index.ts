@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import { useEventBus } from '@/eventBus'
-import ExampleView from '@/components/examples/ExampleView.vue'
+import ExampleView from '@/components/examples/ExampleView.vue';
+import { useEventBus } from '@/shared/event-bus/event-bus';
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
 
 const catalogRoutes = [
   {
@@ -34,7 +34,7 @@ const catalogRoutes = [
     name: 'addresses',
     component: () => import(`../domains/catalogs/addresses/AddressesView.vue`),
   },
-]
+];
 
 const orderRoutes = [
   {
@@ -48,19 +48,19 @@ const orderRoutes = [
     component: () => import('../domains/purchases/orders/OrderDetailView.vue'),
   },
   {
-    path: '/orders/:orderId/items/:id',
+    path: '/orders/:id/items/:itemid',
     name: 'item-detail',
     component: () => import('../domains/purchases/order-items/OrderItemDetail.vue'),
   },
-]
+];
 
-const examplesRoutes: RouteRecordRaw[] =[
+const examplesRoutes: RouteRecordRaw[] = [
   {
     path: '/examples',
     name: 'examples',
-    component: ExampleView
+    component: ExampleView,
   },
-]
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -95,22 +95,22 @@ const router = createRouter({
       component: () => import('../views/NotFoundView.vue'),
     },
   ],
-})
+});
 
 router.beforeEach((to, from, next) => {
   const { emit } = useEventBus();
-  if (to.name === 'item-detail') {
-    const orderId = to.params.orderId
+  if (from.name === 'item-detail') {
+    const orderId = from.params.id;
     if (!orderId || orderId === 'new' || orderId === 'null') {
       emit('alert', {
         type: 'error',
         message: 'Please save the purchase order first before adding items',
-      })
-      next({ name: 'orders' })
-      return
+      });
+      next({ name: 'orders' });
+      return;
     }
   }
-  next()
-})
+  next();
+});
 
-export default router
+export default router;

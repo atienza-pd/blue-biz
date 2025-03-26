@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Product } from '@/domains/catalogs/products/product'
-import { computed, nextTick, ref } from 'vue'
+
+import { computed, nextTick, ref, watch } from 'vue';
 
 interface Props {
   modelValue: string
@@ -17,6 +17,12 @@ const searchQuery = ref(props.modelValue)
 const showDropdown = ref(false)
 const activeIndex = ref(-1)
 const dropdownRef = ref<HTMLUListElement | null>(null)
+
+watch(() => props.modelValue, (newValue) => {
+  if (!props.modelValue) {
+    searchQuery.value = ''
+  }
+})
 
 const filteredItems = computed(() => {
   return props.values.filter((item) =>
@@ -82,32 +88,19 @@ const onFocusInput = () => {
 </script>
 
 <template>
-  <input
-    type="text"
-    id="supplier"
-    v-model="searchQuery"
-    @focus="onFocusInput"
-    @keydown="handleKeydown"
+  <input type="text" id="supplier" v-model="searchQuery" @focus="onFocusInput" @keydown="handleKeydown"
     @blur="onBlurAutoComplete"
     class="block w-full p-2 rounded-md border border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm focus:outline-none"
-    placeholder="Search supplier..."
-  />
+    placeholder="Search supplier..." />
   <!-- Dropdown -->
-  <div
-    v-if="showDropdown && filteredItems.length > 0"
-    class="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg border border-gray-200"
-  >
+  <div v-if="showDropdown && filteredItems.length > 0"
+    class="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg border border-gray-200">
     <ul ref="dropdownRef" class="max-h-60 overflow-auto py-1">
-      <li
-        v-for="(item, index) in filteredItems"
-        :key="item.id"
-        @mousedown="selectItem(item)"
-        @mouseover="activeIndex = index"
-        :class="[
+      <li v-for="(item, index) in filteredItems" :key="item.id" @mousedown="selectItem(item)"
+        @mouseover="activeIndex = index" :class="[
           'px-4 py-2 cursor-pointer',
           activeIndex === index ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-100',
-        ]"
-      >
+        ]">
         {{ item.name }}
       </li>
     </ul>

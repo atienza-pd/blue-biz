@@ -1,6 +1,7 @@
-export interface PurchaseOrderItem {
-  productId: string
-  quantity: number
-  unitPrice: number
-  subtotal: number
+export interface OrderItem {
+  id: string;
+  productId: string;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
 }

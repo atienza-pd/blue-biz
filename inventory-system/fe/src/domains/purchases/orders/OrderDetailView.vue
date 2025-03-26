@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { Alert } from '@/components/Alert/alert.model'
 import PaperView from '@/components/PaperView.vue'
-import { useEventBus } from '@/eventBus'
+import { useEventBus } from '@/shared/event-bus/event-bus'
 import { useSuppliersStore } from '@/stores/suppliers'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -35,15 +36,15 @@ watch(() => route.params.id, (newId) => {
   }
 })
 
-const onSubmit = async () => {
+const onSubmit = () => {
   if (id === 'new') {
     ordersStore.addPurchaseOrder(orderDetail.value)
     const newId = ordersStore.orderlist[ordersStore.orderlist.length - 1].id
     router.replace({ params: { id: newId } })
-    emit('alert', { type: 'success', message: 'Purchase order has been saved!' })
+    emit<Alert>('alert', { type: 'success', message: 'Purchase order has been saved!' })
   } else {
     ordersStore.editPurchaseOrder(orderDetail.value)
-    emit<{ type: string, message: string }>('alert', { type: 'success', message: 'Purchase order has been updated!' })
+    emit<Alert>('alert', { type: 'success', message: 'Purchase order has been updated!' })
   }
 }
 
@@ -54,8 +55,6 @@ const reset = () => {
     orderDetail.value = { ...ordersStore.selectPurchaseOrder(id) ?? {} as OrderModel }
   }
 }
-
-
 </script>
 
 <template>
@@ -111,7 +110,6 @@ const reset = () => {
             </select>
           </div>
         </div>
-
         <div class="flex justify-end space-x-3">
           <button type="button" @click="reset"
             class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
