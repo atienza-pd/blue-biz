@@ -6,6 +6,7 @@ const props = defineProps<{
   collapsable?: boolean
   collapsedState?: 'collapsed' | 'expanded'
   fixedCollapsed?: boolean
+  onBack?: () => void
 }>()
 
 const defaultCollapsedState = props.fixedCollapsed || props.collapsedState && props.collapsedState === 'collapsed'
@@ -31,15 +32,25 @@ watch(() => props.fixedCollapsed, (isFixedCollapsed) => {
     <div class="text-white py-4 px-8 rounded-t-md flex justify-between bg-blue-600"
       :class="{ 'fixed-collapsed': fixedCollapsed }">
       <h1 class="text-2xl font-bold">{{ title }}</h1>
-      <button v-show="collapsable" type="button" @click="onCollapsed"
-        class="p-2 text-gray-200 hover:text-gray-700 rounded-full hover:bg-gray-100">
-        <svg class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-180': isCollapsed }"
-          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd"
-            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-            clip-rule="evenodd" />
-        </svg>
-      </button>
+      <div class="flex items-center gap-2">
+        <button v-show="collapsable" type="button" @click="onCollapsed"
+          class="p-2 text-gray-200 hover:text-gray-700 rounded-full hover:bg-gray-100">
+          <svg class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-180': isCollapsed }"
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+        <button v-if="onBack" @click="onBack"
+          class="p-2 text-gray-200 hover:text-gray-700 rounded-full bg-blue-500 hover:bg-gray-100">
+          <svg class="w-5 h-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20" fill="currentColor" stroke-width="2">
+            <path
+              d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="overflow-auto flex-1"
       :class="{ 'collapsed-content': isCollapsed, 'not-collapsed-content': !isCollapsed }">

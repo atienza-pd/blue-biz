@@ -28,3 +28,11 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Database files
+db-*.json
+
+# Ignore local changes only (keep file tracked but ignore changes)
+# Use: git update-index --skip-worktree <file>
+# To stop ignoring: git update-index --no-skip-worktree <file>
+

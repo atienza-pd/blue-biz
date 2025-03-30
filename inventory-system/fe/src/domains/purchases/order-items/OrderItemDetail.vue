@@ -72,7 +72,7 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <PaperView title="Order Item Detail">
+  <PaperView title="Order Item Detail" @back="router.back">
     <form @submit.prevent="onSubmit" class="space-y-6">
       <div>
         <label for="products" class="block text-sm font-medium text-gray-700">Product</label>

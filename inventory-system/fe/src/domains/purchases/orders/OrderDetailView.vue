@@ -65,7 +65,7 @@ const reset = () => {
 
 <template>
   <div class="space-y-1">
-    <PaperView title="Purchase Order Detail" :collapsable="true" collapsed-state="expanded">
+    <PaperView title="Purchase Order Detail" :collapsable="true" collapsed-state="expanded" @back="router.back">
       <form @submit.prevent="onSubmit" class="space-y-6">
         <div>
           <label for="poNumber" class="block text-sm font-medium text-gray-700">PO Number</label>
