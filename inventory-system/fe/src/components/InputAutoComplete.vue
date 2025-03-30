@@ -9,6 +9,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   values: () => [],
+  modelValue: '',
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -26,7 +27,7 @@ watch(() => props.modelValue, (newValue) => {
 
 const filteredItems = computed(() => {
   return props.values.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.value.toLowerCase()),
+    item.name?.toLowerCase().includes(searchQuery.value.toLowerCase()),
   )
 })
 

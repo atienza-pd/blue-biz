@@ -2,14 +2,15 @@
 import InputAutoComplete from '@/components/InputAutoComplete.vue'
 import PaperView from '@/components/PaperView.vue'
 import { useProductsStore } from '@/stores/products'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { type OrderItem, useOrderItemsStore } from './order-items.store'
 import { useOrderItemFormValidation } from './use-order-item-form-validation'
 
+const defaultFormValue = { id: '', orderId: '', productId: '', quantity: 0 }
 const route = useRoute()
 const router = useRouter()
-const orderItem = ref<OrderItem>({ id: '', orderId: '', productId: '', quantity: 0 })
+const orderItem = ref<OrderItem>({ ...defaultFormValue })
 const id = route.params.itemid as string
 const orderId = route.params.id as string
 const productsStore = useProductsStore()
@@ -22,6 +23,19 @@ const products = computed(() =>
     unitPrice: product.unitPrice,
   })),
 )
+
+const selectOrderItemDetail = computed(() => {
+  return orderItemsStore.select(id) as OrderItem
+})
+
+watch(selectOrderItemDetail, (value) => {
+  if (value) {
+    orderItem.value = { ...value }
+    return;
+  }
+
+  orderItem.value = { ...defaultFormValue }
+}, { immediate: true })
 
 const selectedProduct = computed(() => {
   const selectedProduct = productsStore.selectProduct(orderItem.value.productId)
@@ -36,7 +50,12 @@ const selectedProduct = computed(() => {
 })
 
 const reset = () => {
-  orderItem.value = { id: '', productId: '', orderId: '', quantity: 0 }
+  if (id === 'new') {
+    orderItem.value = { ...defaultFormValue, orderId }
+    return;
+  }
+
+  orderItem.value = { ...selectOrderItemDetail.value }
 }
 
 const totalPrice = computed(() => orderItem.value.quantity * selectedProduct.value.unitPrice)

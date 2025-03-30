@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
   title: string
-  collapsed?: boolean
+  collapsable?: boolean
   collapsedState?: 'collapsed' | 'expanded'
   fixedCollapsed?: boolean
 }>()
@@ -18,14 +18,20 @@ const onCollapsed = () => {
 
   isCollapsed.value = !isCollapsed.value
 }
+
+watch(() => props.fixedCollapsed, (isFixedCollapsed) => {
+  isCollapsed.value = isFixedCollapsed
+})
+
 </script>
 
 <template>
   <div class="bg-white text-black flex flex-col shadow-md"
-    :class="{ 'collapsed-paper': collapsed, 'not-collapsed-paper': !collapsed }">
-    <div class="bg-blue-600 text-white py-4 px-8 rounded-t-md flex justify-between">
+    :class="{ 'collapsed-paper': collapsable, 'not-collapsed-paper': !collapsable }">
+    <div class="text-white py-4 px-8 rounded-t-md flex justify-between bg-blue-600"
+      :class="{ 'fixed-collapsed': fixedCollapsed }">
       <h1 class="text-2xl font-bold">{{ title }}</h1>
-      <button v-show="collapsed" type="button" @click="onCollapsed"
+      <button v-show="collapsable" type="button" @click="onCollapsed"
         class="p-2 text-gray-200 hover:text-gray-700 rounded-full hover:bg-gray-100">
         <svg class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-180': isCollapsed }"
           xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -51,5 +57,9 @@ const onCollapsed = () => {
 
 .not-collapsed-content {
   @apply p-8;
+}
+
+.fixed-collapsed {
+  @apply bg-gray-500;
 }
 </style>

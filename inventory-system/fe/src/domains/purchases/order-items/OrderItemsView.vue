@@ -1,40 +1,53 @@
 <script setup lang="ts">
-import { useCurrency } from '@/pipes/currency.pipe'
-import { useUpperCase } from '@/pipes/uppercase.pipe'
-import { computed, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useOrderItemsStore } from './order-items.store'
+import { useCurrency } from '@/pipes/currency.pipe';
+import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useOrderItemsStore } from './order-items.store';
 
-const toUpperCase = useUpperCase()
-const toCurrency = useCurrency()
-const router = useRouter()
-const route = useRoute()
+const toCurrency = useCurrency();
+const router = useRouter();
+const route = useRoute();
 const orderId = ref(route.params.id as string);
-const orderItemsStore = useOrderItemsStore()
-
-const totalPrice = computed(() => {
-  const total = orderItemsStore.orderItemsList.reduce((acc, item) => acc + item.subtotal, 0)
-  return toCurrency(total)
-})
+const orderItemsStore = useOrderItemsStore();
 
 const addNewItemOrder = () => {
-  router.push({ name: 'item-detail', params: { id: orderId.value, itemid: 'new' } })
-}
+  router.push({ name: 'item-detail', params: { id: orderId.value, itemid: 'new' } });
+};
 
-watch(() => route.params.id, (newId) => {
-  orderId.value = newId as string;
-})
+const editItemOrder = (itemId: string) => {
+  router.push({ name: 'item-detail', params: { id: orderId.value, itemid: itemId } });
+};
 
-const editItemOrder = (id: string) => { }
+const orderItemsData = computed(() => {
+  const orderItemsData = orderItemsStore.orderItemsData;
+  return {
+    totalPrice: orderItemsData.totalPrice,
+    fullItems: orderItemsData.fullItems,
+  };
+});
+
+watch(
+  () => orderId.value,
+  (newId) => {
+    orderItemsStore.selectOrderId = newId;
+  },
+  { immediate: true },
+);
+
+watch(
+  () => route.params.id,
+  (newId) => {
+    orderId.value = newId as string;
+  },
+);
 </script>
 
 <template>
-
   <div class="flex justify-between items-center">
     <button @click="addNewItemOrder" class="mb-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
       New Order Item
     </button>
-    <h2 class="text-2xl font-semibold">Total: {{ totalPrice }}</h2>
+    <h2 class="text-2xl font-semibold">Total: {{ orderItemsData.totalPrice }}</h2>
   </div>
 
   <div class="overflow-auto">
@@ -50,7 +63,7 @@ const editItemOrder = (id: string) => { }
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(purchaseOrder, index) in orderItemsStore.orderItemsList" :key="purchaseOrder.id ?? index"
+        <tr v-for="(purchaseOrder, index) in orderItemsData.fullItems" :key="purchaseOrder.id ?? index"
           class="hover:bg-gray-100">
           <td class="py-2 px-4 border-b">{{ index + 1 }}</td>
           <td class="py-2 px-4 border-b">{{ purchaseOrder.description }}</td>

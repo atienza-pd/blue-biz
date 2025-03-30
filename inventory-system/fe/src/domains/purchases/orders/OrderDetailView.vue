@@ -14,9 +14,10 @@ const ordersStore = useOrdersStore()
 const suppliersStore = useSuppliersStore()
 const router = useRouter()
 const route = useRoute()
-const { emit } = useEventBus()
+const isCollapsed = ref(false);
 let id = route.params.id as string
-const orderDetail = ref({} as OrderModel)
+const orderDetail = ref({ status: 'draft' } as OrderModel)
+const { emit } = useEventBus()
 const { errors, isFormValid, isFormDirty } = useOrderFormValidation(orderDetail)
 
 const selectOrderDetail = computed(() => {
@@ -24,6 +25,10 @@ const selectOrderDetail = computed(() => {
 })
 
 watch(selectOrderDetail, (value) => {
+  if (id === 'new') {
+    return
+  }
+
   orderDetail.value = { ...value }
 }, { immediate: true })
 
@@ -33,6 +38,7 @@ watch(() => route.params.id, (newId) => {
     orderDetail.value = {} as OrderModel
   } else {
     orderDetail.value = { ...ordersStore.selectPurchaseOrder(id) ?? {} as OrderModel }
+    isCollapsed.value = false
   }
 })
 
@@ -59,7 +65,7 @@ const reset = () => {
 
 <template>
   <div class="space-y-1">
-    <PaperView title="Purchase Order Detail" :collapsed="true" collapsed-state="expanded">
+    <PaperView title="Purchase Order Detail" :collapsable="true" collapsed-state="expanded">
       <form @submit.prevent="onSubmit" class="space-y-6">
         <div>
           <label for="poNumber" class="block text-sm font-medium text-gray-700">PO Number</label>
@@ -108,6 +114,7 @@ const reset = () => {
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
             </select>
+            <span v-if="errors.status" class="text-red-500 text-sm">{{ errors.status }}</span>
           </div>
         </div>
         <div class="flex justify-end space-x-3">
@@ -122,7 +129,7 @@ const reset = () => {
         </div>
       </form>
     </PaperView>
-    <PaperView title="Order Details" :collapsed="true" :fixed-collapsed="id === 'new'">
+    <PaperView title="Order Details" :collapsable="true" :fixed-collapsed="id === 'new'">
       <OrderItemsView />
     </PaperView>
   </div>

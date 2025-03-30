@@ -1,7 +1,7 @@
 export const useCurrency = () => {
   return (value: number | undefined | null) => {
     if (!value) {
-      return '';
+      return '0.00';
     }
     return new Intl.NumberFormat('en-US', {
       style: 'decimal',
