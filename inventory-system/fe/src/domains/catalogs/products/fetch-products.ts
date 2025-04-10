@@ -1,5 +1,5 @@
-import axios from 'axios'
-import type { Product } from './product'
+import axios from 'axios';
+import type { Product } from './product';
 
 /**
  * Fetches the list of products from a local JSON file.
@@ -9,9 +9,9 @@ import type { Product } from './product'
  */
 export const fetchProducts = async (): Promise<Product[]> => {
   try {
-    const response = await axios.get('/src/data/fake-products.json')
-    return response.data
+    const response = await axios.get('http://localhost:3001/products');
+    return response.data;
   } catch (error) {
-    return []
+    return [];
   }
-}
+};
